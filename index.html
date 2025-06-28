@@ -7,7 +7,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
     body {
-      margin: 0; 
+      margin: 0;
       background: #121212;
       font-family: 'Poppins', sans-serif;
       color: #eee;
@@ -15,6 +15,25 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+    }
+    #nameOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #121212;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    #nameOverlay div {
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ffe7;
+      text-align: center;
     }
     header {
       width: 100%;
@@ -60,7 +79,7 @@
 
     main {
       margin-top: 40px;
-      max-width: 400px;
+      max-width: 420px;
       width: 90%;
       background: #222;
       padding: 25px;
@@ -78,17 +97,17 @@
     }
     .payment-buttons {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
       margin-bottom: 25px;
     }
     button {
-      flex: 1;
       background: linear-gradient(45deg, #00c6ff, #0072ff);
       border: none;
       color: white;
-      padding: 14px 0;
-      font-size: 1.2rem;
+      padding: 14px 20px;
+      font-size: 1rem;
       border-radius: 10px;
       cursor: pointer;
       font-weight: 700;
@@ -98,7 +117,6 @@
     button:hover {
       background: linear-gradient(45deg, #0072ff, #00c6ff);
     }
-
     .qr-section {
       display: none;
       margin-top: 20px;
@@ -126,7 +144,6 @@
       padding-bottom: 5px;
       text-shadow: 0 0 6px #ffcc00;
     }
-
     .transfer-btn {
       display: inline-block;
       background: #00ffe7;
@@ -149,17 +166,20 @@
 </head>
 <body>
 
+<div id="nameOverlay">
+  <div>
+    <h2 style="color:#00ffe7;">Masukkan Nama Anda</h2>
+    <input type="text" id="buyerName" placeholder="Nama Anda" style="padding:10px; font-size:1rem; width:100%; border-radius:8px; border:none; margin-bottom:15px;">
+    <br>
+    <button onclick="submitName()">Lanjutkan</button>
+  </div>
+</div>
+
 <header>
   PAYMENT BAKZ HOST
   <div class="lights">
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
   </div>
 </header>
 
@@ -169,10 +189,12 @@
   <div class="payment-buttons">
     <button id="btn-qris">QRIS</button>
     <button id="btn-dana">DANA</button>
+    <button id="btn-seabank">Seabank</button>
+    <button id="btn-gopay">Gopay</button>
   </div>
-  
+
   <div id="qris-section" class="qr-section">
-    <img class="qr" src="https://files.catbox.moe/t8butl.jpg" alt="QRIS Payment" />
+    <img class="qr" src="https://files.catbox.moe/yx6ot7.jpg" alt="QRIS Payment" />
     <p>KIRIM BUKTI TRANSFER KE OWNER</p>
     <p class="phone">No: 6285962823375</p>
     <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
@@ -185,23 +207,69 @@
     <p class="phone">No: 6285962823375</p>
     <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer%20via%20DANA.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
   </div>
+
+  <div id="seabank-section" class="qr-section">
+    <p>Nomor Seabank:</p>
+    <p class="phone">901063646090</p>
+    <p>KIRIM BUKTI TRANSFER KE OWNER</p>
+    <p class="phone">No: 6285962823375</p>
+    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer%20via%20Seabank.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
+  </div>
+
+  <div id="gopay-section" class="qr-section">
+    <p>Nomor Gopay:</p>
+    <p class="phone">089516286679</p>
+    <p>KIRIM BUKTI TRANSFER KE OWNER</p>
+    <p class="phone">No: 6285962823375</p>
+    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer%20via%20Gopay.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
+  </div>
+
 </main>
 
 <script>
-  const btnQris = document.getElementById('btn-qris');
-  const btnDana = document.getElementById('btn-dana');
-  const qrisSection = document.getElementById('qris-section');
-  const danaSection = document.getElementById('dana-section');
+  const buttons = {
+    qris: document.getElementById('btn-qris'),
+    dana: document.getElementById('btn-dana'),
+    seabank: document.getElementById('btn-seabank'),
+    gopay: document.getElementById('btn-gopay'),
+  };
 
-  btnQris.addEventListener('click', () => {
-    qrisSection.style.display = 'block';
-    danaSection.style.display = 'none';
-  });
+  const sections = {
+    qris: document.getElementById('qris-section'),
+    dana: document.getElementById('dana-section'),
+    seabank: document.getElementById('seabank-section'),
+    gopay: document.getElementById('gopay-section'),
+  };
 
-  btnDana.addEventListener('click', () => {
-    danaSection.style.display = 'block';
-    qrisSection.style.display = 'none';
-  });
+  function showSection(selected) {
+    for (const key in sections) {
+      sections[key].style.display = key === selected ? 'block' : 'none';
+    }
+  }
+
+  buttons.qris.addEventListener('click', () => showSection('qris'));
+  buttons.dana.addEventListener('click', () => showSection('dana'));
+  buttons.seabank.addEventListener('click', () => showSection('seabank'));
+  buttons.gopay.addEventListener('click', () => showSection('gopay'));
+
+  function submitName() {
+    const name = document.getElementById('buyerName').value.trim();
+    if (name) {
+      localStorage.setItem('buyerName', name);
+      document.getElementById('nameOverlay').style.display = 'none';
+      document.querySelector('header').innerHTML += `<div style="font-size:1rem; margin-top:10px;">Halo, <span style="color:#00ffe7;">${name}</span> 👋</div>`;
+    } else {
+      alert("Silakan isi nama terlebih dahulu!");
+    }
+  }
+
+  window.onload = function() {
+    const savedName = localStorage.getItem('buyerName');
+    if (savedName) {
+      document.getElementById('nameOverlay').style.display = 'none';
+      document.querySelector('header').innerHTML += `<div style="font-size:1rem; margin-top:10px;">Halo, <span style="color:#00ffe7;">${savedName}</span> 👋</div>`;
+    }
+  };
 </script>
 
 </body>
