@@ -16,18 +16,18 @@
       align-items: center;
       min-height: 100vh;
     }
+
     #nameOverlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: #121212;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 9999;
     }
+
     #nameOverlay div {
       background: #222;
       padding: 30px;
@@ -35,6 +35,7 @@
       box-shadow: 0 0 20px #00ffe7;
       text-align: center;
     }
+
     header {
       width: 100%;
       padding: 15px 0;
@@ -44,10 +45,11 @@
       letter-spacing: 2px;
       position: relative;
       background: #222;
-      overflow: hidden;
-      user-select: none;
       text-shadow: 0 0 10px #00ffe7;
+      border-bottom: 2px solid #00ffe7;
+      box-shadow: 0 0 15px #00ffe7;
     }
+
     .lights {
       position: absolute;
       top: 50%;
@@ -56,13 +58,14 @@
       gap: 12px;
       transform: translate(-50%, -50%);
     }
+
     .light {
       width: 15px;
       height: 15px;
       border-radius: 50%;
-      box-shadow: 0 0 10px #fff;
       animation: blink 4s infinite;
     }
+
     .light:nth-child(1) { background: #ff3b3b; animation-delay: 0s; }
     .light:nth-child(2) { background: #ffb93b; animation-delay: 0.5s; }
     .light:nth-child(3) { background: #fff53b; animation-delay: 1s; }
@@ -87,6 +90,7 @@
       box-shadow: 0 0 20px #00ffe7;
       text-align: center;
     }
+
     img.profile {
       width: 120px;
       height: 120px;
@@ -95,6 +99,7 @@
       border: 3px solid #00ffe7;
       margin-bottom: 25px;
     }
+
     .payment-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -102,6 +107,7 @@
       gap: 15px;
       margin-bottom: 25px;
     }
+
     button {
       background: linear-gradient(45deg, #00c6ff, #0072ff);
       border: none;
@@ -111,21 +117,41 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 700;
-      transition: background 0.3s ease;
-      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
     button:hover {
       background: linear-gradient(45deg, #0072ff, #00c6ff);
     }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: white;
+      padding: 2px;
+    }
+
     .qr-section {
       display: none;
       margin-top: 20px;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
     }
+
+    .qr-section.show {
+      display: block;
+      opacity: 1;
+    }
+
     .qr-section img.qr {
       max-width: 100%;
       border-radius: 12px;
       box-shadow: 0 0 15px #00ffe7;
     }
+
     .qr-section p {
       margin-top: 15px;
       font-weight: 600;
@@ -133,17 +159,26 @@
       color: #00ffe7;
       text-shadow: 0 0 5px #00ffe7;
     }
-    .qr-section .phone {
-      margin-top: 10px;
+
+    .phone {
       font-size: 1.1rem;
       font-weight: 700;
       color: #ffcc00;
-      user-select: text;
       border-bottom: 2px solid #ffcc00;
       display: inline-block;
       padding-bottom: 5px;
-      text-shadow: 0 0 6px #ffcc00;
     }
+
+    input[type="file"] {
+      margin-top: 10px;
+      padding: 8px;
+      background: #333;
+      color: #eee;
+      border: 1px solid #00ffe7;
+      border-radius: 8px;
+      width: 100%;
+    }
+
     .transfer-btn {
       display: inline-block;
       background: #00ffe7;
@@ -153,28 +188,36 @@
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 10px #00ffe7, 0 0 20px #00ffe7;
       margin-top: 15px;
       text-decoration: none;
+      box-shadow: 0 0 10px #00ffe7, 0 0 20px #00ffe7;
     }
+
     .transfer-btn:hover {
       background: #00c6b0;
-      box-shadow: 0 0 15px #00c6ff, 0 0 30px #00c6ff;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
 
+<!-- Nama overlay -->
 <div id="nameOverlay">
   <div>
     <h2 style="color:#00ffe7;">Masukkan Nama Anda</h2>
     <input type="text" id="buyerName" placeholder="Nama Anda" style="padding:10px; font-size:1rem; width:100%; border-radius:8px; border:none; margin-bottom:15px;">
-    <br>
+    <div id="loading" style="display:none; margin-bottom: 15px;">
+      <div style="border: 4px solid #00ffe7; border-top: 4px solid transparent; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: auto;"></div>
+    </div>
     <button onclick="submitName()">Lanjutkan</button>
   </div>
 </div>
 
+<!-- Header -->
 <header>
   PAYMENT BAKZ HOST
   <div class="lights">
@@ -183,49 +226,54 @@
   </div>
 </header>
 
+<!-- Konten -->
 <main>
-  <img class="profile" src="https://files.catbox.moe/vvtgus.jpg" alt="Profil Bakz Host" />
-  
+  <img class="profile" src="https://files.catbox.moe/vvtgus.jpg" alt="Profil" />
   <div class="payment-buttons">
-    <button id="btn-qris">QRIS</button>
-    <button id="btn-dana">DANA</button>
-    <button id="btn-seabank">Seabank</button>
-    <button id="btn-gopay">Gopay</button>
+    <button id="btn-qris"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/QRIS_logo.svg" class="icon">QRIS</button>
+    <button id="btn-dana"><img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Dana_logo.svg" class="icon">DANA</button>
+    <button id="btn-seabank"><img src="https://seeklogo.com/images/S/seabank-logo-2D2D3EBD98-seeklogo.com.png" class="icon">Seabank</button>
+    <button id="btn-gopay"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Logo_Gopay.svg" class="icon">Gopay</button>
   </div>
 
+  <!-- QRIS -->
   <div id="qris-section" class="qr-section">
-    <img class="qr" src="https://files.catbox.moe/yx6ot7.jpg" alt="QRIS Payment" />
-    <p>KIRIM BUKTI TRANSFER KE OWNER</p>
-    <p class="phone">No: 6285962823375</p>
-    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
+    <img class="qr" src="https://files.catbox.moe/yx6ot7.jpg" alt="QRIS" />
+    <p>No: <span class="phone">6285962823375</span></p>
+    <p id="timer">Sisa waktu: 05:00</p>
+    <input type="file" id="upload-qris" />
+    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo admin, saya sudah transfer via QRIS. Berikut bukti pembayaran saya..." target="_blank">Kirim Bukti</a>
   </div>
-  
+
+  <!-- DANA -->
   <div id="dana-section" class="qr-section">
-    <p>Nomor DANA:</p>
-    <p class="phone">088225351947</p>
-    <p>KIRIM BUKTI TRANSFER KE OWNER</p>
-    <p class="phone">No: 6285962823375</p>
-    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer%20via%20DANA.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
+    <p>Nomor DANA: <span class="phone">088225351947</span></p>
+    <p>No: <span class="phone">6285962823375</span></p>
+    <p id="timer">Sisa waktu: 05:00</p>
+    <input type="file" id="upload-dana" />
+    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo admin, saya sudah transfer via DANA. Berikut bukti pembayaran saya..." target="_blank">Kirim Bukti</a>
   </div>
 
+  <!-- Seabank -->
   <div id="seabank-section" class="qr-section">
-    <p>Nomor Seabank:</p>
-    <p class="phone">901063646090</p>
-    <p>KIRIM BUKTI TRANSFER KE OWNER</p>
-    <p class="phone">No: 6285962823375</p>
-    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer%20via%20Seabank.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
+    <p>Nomor Seabank: <span class="phone">901063646090</span></p>
+    <p>No: <span class="phone">6285962823375</span></p>
+    <p id="timer">Sisa waktu: 05:00</p>
+    <input type="file" id="upload-seabank" />
+    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo admin, saya sudah transfer via Seabank. Berikut bukti pembayaran saya..." target="_blank">Kirim Bukti</a>
   </div>
 
+  <!-- Gopay -->
   <div id="gopay-section" class="qr-section">
-    <p>Nomor Gopay:</p>
-    <p class="phone">089516286679</p>
-    <p>KIRIM BUKTI TRANSFER KE OWNER</p>
-    <p class="phone">No: 6285962823375</p>
-    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo%20admin,%20saya%20sudah%20transfer%20via%20Gopay.%20Berikut%20bukti%20pembayaran%20saya..." target="_blank">Kirim Bukti Transfer</a>
+    <p>Nomor Gopay: <span class="phone">089516286679</span></p>
+    <p>No: <span class="phone">6285962823375</span></p>
+    <p id="timer">Sisa waktu: 05:00</p>
+    <input type="file" id="upload-gopay" />
+    <a class="transfer-btn" href="https://wa.me/6285962823375?text=Halo admin, saya sudah transfer via Gopay. Berikut bukti pembayaran saya..." target="_blank">Kirim Bukti</a>
   </div>
-
 </main>
 
+<!-- Script -->
 <script>
   const buttons = {
     qris: document.getElementById('btn-qris'),
@@ -241,10 +289,31 @@
     gopay: document.getElementById('gopay-section'),
   };
 
+  let countdown;
+
+  function startTimer() {
+    clearInterval(countdown);
+    let time = 300;
+    const timers = document.querySelectorAll('#timer');
+    countdown = setInterval(() => {
+      const m = String(Math.floor(time / 60)).padStart(2, '0');
+      const s = String(time % 60).padStart(2, '0');
+      timers.forEach(t => t.textContent = `Sisa waktu: ${m}:${s}`);
+      if (--time < 0) {
+        clearInterval(countdown);
+        timers.forEach(t => t.textContent = 'Waktu habis! Silakan ulangi pembayaran.');
+      }
+    }, 1000);
+  }
+
   function showSection(selected) {
-    for (const key in sections) {
-      sections[key].style.display = key === selected ? 'block' : 'none';
-    }
+    Object.keys(sections).forEach(key => {
+      sections[key].classList.remove('show');
+      sections[key].style.display = 'none';
+    });
+    sections[selected].style.display = 'block';
+    setTimeout(() => sections[selected].classList.add('show'), 10);
+    startTimer();
   }
 
   buttons.qris.addEventListener('click', () => showSection('qris'));
@@ -255,15 +324,18 @@
   function submitName() {
     const name = document.getElementById('buyerName').value.trim();
     if (name) {
-      localStorage.setItem('buyerName', name);
-      document.getElementById('nameOverlay').style.display = 'none';
-      document.querySelector('header').innerHTML += `<div style="font-size:1rem; margin-top:10px;">Halo, <span style="color:#00ffe7;">${name}</span> 👋</div>`;
+      document.getElementById('loading').style.display = 'block';
+      setTimeout(() => {
+        localStorage.setItem('buyerName', name);
+        document.getElementById('nameOverlay').style.display = 'none';
+        document.querySelector('header').innerHTML += `<div style="font-size:1rem; margin-top:10px;">Halo, <span style="color:#00ffe7;">${name}</span> 👋</div>`;
+      }, 1500);
     } else {
       alert("Silakan isi nama terlebih dahulu!");
     }
   }
 
-  window.onload = function() {
+  window.onload = () => {
     const savedName = localStorage.getItem('buyerName');
     if (savedName) {
       document.getElementById('nameOverlay').style.display = 'none';
@@ -271,6 +343,5 @@
     }
   };
 </script>
-
 </body>
 </html>
